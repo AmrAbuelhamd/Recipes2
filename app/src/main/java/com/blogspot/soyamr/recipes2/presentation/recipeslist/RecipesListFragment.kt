@@ -81,7 +81,7 @@ class RecipesListFragment : Fragment(R.layout.fragment_recipes_list) {
                     viewModel.searchFor(text?.trim().toString())
                 }
                 setOnEditorActionListener { _, actionId, _ ->
-                    if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    if (actionId == EditorInfo.IME_ACTION_DONE) {
                         clearFocus()
                     }
                     false
