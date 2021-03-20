@@ -6,6 +6,9 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.blogspot.soyamr.recipes2.R
 import com.blogspot.soyamr.recipes2.databinding.FragmentRecipeDetailsBinding
@@ -22,6 +25,11 @@ class RecipeDetailsFragment : Fragment(R.layout.fragment_recipe_details) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpViewModelObservers()
+
+
+        val navController = findNavController()
+        val appBarConfiguration = AppBarConfiguration(navController.graph)
+        viewBinding.toolbar.setupWithNavController(navController, appBarConfiguration)
     }
 
     private fun setUpViewModelObservers() {
@@ -29,6 +37,10 @@ class RecipeDetailsFragment : Fragment(R.layout.fragment_recipe_details) {
         viewModel.recipe.observe(viewLifecycleOwner, ::bindRecipeData)
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewBinding.toolbar.title = ""
+    }
     private fun bindRecipeData(recipeDetailedInfo: RecipeDetailedInfo?) {
         recipeDetailedInfo?.let {
             with(viewBinding) {
