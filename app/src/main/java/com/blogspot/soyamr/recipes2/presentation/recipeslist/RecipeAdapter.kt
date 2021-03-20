@@ -1,4 +1,4 @@
-package com.blogspot.soyamr.recipes2.presentation
+package com.blogspot.soyamr.recipes2.presentation.recipeslist
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

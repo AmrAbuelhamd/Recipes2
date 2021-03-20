@@ -1,16 +1,17 @@
 package com.blogspot.soyamr.recipes2.presentation.recipeitem
 
 import android.os.Bundle
+import android.text.Html
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.navArgs
+import androidx.lifecycle.lifecycleScope
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.blogspot.soyamr.recipes2.R
 import com.blogspot.soyamr.recipes2.databinding.FragmentRecipeDetailsBinding
 import com.blogspot.soyamr.recipes2.domain.model.RecipeDetailedInfo
-import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 
 @AndroidEntryPoint
 class RecipeDetailsFragment : Fragment(R.layout.fragment_recipe_details) {
@@ -33,9 +34,15 @@ class RecipeDetailsFragment : Fragment(R.layout.fragment_recipe_details) {
             with(viewBinding) {
                 nameTextView.text = it.name
                 detailsDescriptionTextView.text = it.description
-                diffecultyTextView.text = it.difficulty.toString()
-                instrucitonTextView.text = it.instructions
-                Picasso.get().load(it.images?.get(0)).into(imageView);
+                difficultyTextView.text = it.difficulty.toString()
+                instructionTextView.text =
+                    Html.fromHtml(it.instructions, Html.FROM_HTML_MODE_COMPACT)
+                viewPager2.adapter = ViewPagerAdapter(it.images ?: return)
+                viewPager2.setPageTransformer(ZoomOutPageTransformer())
+                lifecycleScope.launchWhenCreated {
+                    delay(500)
+                    viewPager2.setCurrentItem(if (it.images.size >= 2) 1 else 0, true)
+                }
             }
         }
     }

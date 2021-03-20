@@ -12,7 +12,6 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.blogspot.soyamr.recipes2.R
 import com.blogspot.soyamr.recipes2.databinding.FragmentRecipesListBinding
 import com.blogspot.soyamr.recipes2.domain.model.RecipeInfo
-import com.blogspot.soyamr.recipes2.presentation.RecipeAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
