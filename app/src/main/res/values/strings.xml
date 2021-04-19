@@ -5,4 +5,7 @@
     <string name="recipe_photo">recipe photo</string>
     <string name="type_to_search_the_list">type to search the list</string>
     <string name="difficulty">Difficulty:\u0020</string>
+    <string name="search">Search</string>
+    <string name="sort_by_name">Sort By Name</string>
+    <string name="sort_by_date">Sort By Date</string>
 </resources>

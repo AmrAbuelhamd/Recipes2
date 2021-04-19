@@ -2,9 +2,8 @@ package com.blogspot.soyamr.recipes2.presentation.recipeslist
 
 import android.os.Bundle
 import android.view.View
-import android.view.inputmethod.EditorInfo
 import android.widget.Toast
-import androidx.core.widget.doAfterTextChanged
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -75,17 +74,21 @@ class RecipesListFragment : Fragment(R.layout.fragment_recipes_list) {
             mySwipeToRefresh.setOnRefreshListener {
                 viewModel.updateData()
             }
-            with(searchEditText){
-                doAfterTextChanged { text ->
-                    viewModel.searchFor(text?.trim().toString())
+
+            val searchView = toolBar.findViewById<SearchView>(R.id.searchBar)
+            searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    searchView.clearFocus()
+                    return true
                 }
-                setOnEditorActionListener { _, actionId, _ ->
-                    if (actionId == EditorInfo.IME_ACTION_DONE) {
-                        clearFocus()
-                    }
-                    false
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    viewModel.searchFor(newText?.trim().toString())
+                    return true
                 }
-            }
+
+            })
+
         }
     }
 
