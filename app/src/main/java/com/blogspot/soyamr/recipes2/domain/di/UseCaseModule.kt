@@ -1,6 +1,6 @@
 package com.blogspot.soyamr.recipes2.domain.di
 
-import com.blogspot.soyamr.recipes2.domain.interactors.*
+import com.blogspot.soyamr.recipes2.domain.usecases.*
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

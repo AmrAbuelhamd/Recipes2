@@ -1,6 +1,7 @@
 package com.blogspot.soyamr.recipes2.presentation
 
 import android.os.Bundle
+import android.view.Menu
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -16,4 +17,8 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
+    override fun onMenuOpened(featureId: Int, menu: Menu): Boolean {
+        return super.onMenuOpened(featureId, menu)
+        println("heeeeeeeeeeeer")
+    }
 }

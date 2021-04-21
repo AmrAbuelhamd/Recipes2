@@ -1,4 +1,4 @@
-package com.blogspot.soyamr.recipes2.domain.interactors
+package com.blogspot.soyamr.recipes2.domain.usecases
 
 import com.blogspot.soyamr.recipes2.domain.model.RecipeDetailedInfo
 import com.blogspot.soyamr.recipes2.domain.model.Result

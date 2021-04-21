@@ -4,6 +4,7 @@ import com.blogspot.soyamr.recipes2.data.database.dao.RecipeDao
 import com.blogspot.soyamr.recipes2.data.network.RecipeApi
 import com.blogspot.soyamr.recipes2.data.util.*
 import com.blogspot.soyamr.recipes2.domain.Repository
+import com.blogspot.soyamr.recipes2.domain.Sort
 import com.blogspot.soyamr.recipes2.domain.model.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -22,9 +23,11 @@ class RepositoryImpl @Inject constructor(
     Repository {
 
 
-    //get flow/observable data from database
-    override fun getRecipes(): Flow<List<RecipeInfo>> =
-        recipeDao.getAll().map { list -> list.map { it.toDomainRecipeInfo() } }
+    override fun getRecipes(sort: Sort): Flow<List<RecipeInfo>> =when(sort){
+        Sort.ByName -> recipeDao.getAllOrderByName().map { list -> list.map { it.toDomainRecipeInfo() } }
+        Sort.ByDate -> recipeDao.getAllOrderByDate().map { list -> list.map { it.toDomainRecipeInfo() } }
+        Sort.Nothing -> recipeDao.getAllOrderDefault().map { list -> list.map { it.toDomainRecipeInfo() } }
+    }
 
     //update database if it's empty only
     override suspend fun updateRecipes(): Result<Unit> =

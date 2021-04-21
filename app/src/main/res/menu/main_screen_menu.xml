@@ -5,15 +5,10 @@
         android:id="@+id/searchBar"
         android:title="@string/search"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/sortByName"
-        android:title="@string/sort_by_name"
-        app:showAsAction="never"
-        android:icon="@drawable/sort_by_name_icon"/>
-    <item
-        android:id="@+id/sortByDate"
-        android:title="@string/sort_by_date"
-        app:showAsAction="never"
-        android:icon="@drawable/sort_by_date_icon"/>
+        android:id="@+id/more"
+        android:title="@string/more"
+        app:showAsAction="always"
+        android:icon="@drawable/more_vert"/>
 </menu>

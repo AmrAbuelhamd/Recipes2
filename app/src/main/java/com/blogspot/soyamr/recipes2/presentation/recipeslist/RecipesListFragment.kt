@@ -10,13 +10,15 @@ import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.blogspot.soyamr.recipes2.R
 import com.blogspot.soyamr.recipes2.databinding.FragmentRecipesListBinding
+import com.blogspot.soyamr.recipes2.domain.Constants.KEY
+import com.blogspot.soyamr.recipes2.domain.Sort
 import com.blogspot.soyamr.recipes2.domain.model.RecipeInfo
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class RecipesListFragment : Fragment(R.layout.fragment_recipes_list) {
 
-    private val viewModel: RecipesListViewModel by viewModels()
+    val viewModel: RecipesListViewModel by viewModels()
     private val viewBinding: FragmentRecipesListBinding by viewBinding()
     private lateinit var adapter: RecipeAdapter
 
@@ -25,6 +27,16 @@ class RecipesListFragment : Fragment(R.layout.fragment_recipes_list) {
         setUpRecycler()
         setUpClickListeners()
         setUpViewModelObservers()
+        setUpDialogObserver()
+    }
+
+    private fun setUpDialogObserver() {
+        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<String>(KEY)
+            ?.observe(viewLifecycleOwner) {
+                it?.let {
+                    viewModel.sort(Sort.getByKey(it))
+                }
+            }
     }
 
 
@@ -86,10 +98,14 @@ class RecipesListFragment : Fragment(R.layout.fragment_recipes_list) {
                     viewModel.searchFor(newText?.trim().toString())
                     return true
                 }
-
             })
 
+            toolBar.setOnMenuItemClickListener {
+                if (it.itemId == R.id.more) {
+                    findNavController().navigate(RecipesListFragmentDirections.actionRecipesListFragmentToBottomSheetFragment())
+                }
+                true
+            }
         }
     }
-
 }

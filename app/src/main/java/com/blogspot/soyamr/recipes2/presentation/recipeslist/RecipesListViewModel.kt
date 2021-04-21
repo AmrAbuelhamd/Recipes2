@@ -1,10 +1,11 @@
 package com.blogspot.soyamr.recipes2.presentation.recipeslist
 
 import androidx.lifecycle.*
-import com.blogspot.soyamr.recipes2.domain.interactors.GetRecipesListUseCase
-import com.blogspot.soyamr.recipes2.domain.interactors.QueryRecipes
-import com.blogspot.soyamr.recipes2.domain.interactors.UpdateRecipesUseCase
+import com.blogspot.soyamr.recipes2.domain.Sort
 import com.blogspot.soyamr.recipes2.domain.model.onFailure
+import com.blogspot.soyamr.recipes2.domain.usecases.GetRecipesListUseCase
+import com.blogspot.soyamr.recipes2.domain.usecases.QueryRecipes
+import com.blogspot.soyamr.recipes2.domain.usecases.UpdateRecipesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
@@ -25,10 +26,11 @@ class RecipesListViewModel @Inject constructor(
     val isLoading: LiveData<Boolean> = _isLoading
 
     private val searchKeyWord = MutableLiveData("")
+    private val sortBy = MutableLiveData(Sort.Nothing)
 
     val recipes = Transformations.switchMap(searchKeyWord) { string ->
         if (string.isNullOrEmpty())
-            getRecipesListUseCase()
+            getRecipesListUseCase(sortBy.value!!)
                 .onStart { _isLoading.value = true }
                 .asLiveData()
         else
@@ -68,6 +70,10 @@ class RecipesListViewModel @Inject constructor(
         text?.let {
             searchKeyWord.value = it
         }
+    }
+
+    fun sort(sortBy: Sort) {
+        this.sortBy.value = sortBy
     }
 
 

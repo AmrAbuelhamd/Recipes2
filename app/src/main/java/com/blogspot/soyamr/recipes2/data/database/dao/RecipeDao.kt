@@ -9,8 +9,14 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface RecipeDao {
+    @Query("SELECT * FROM recipe ORDER BY name")
+    fun getAllOrderByName(): Flow<List<Recipe>>
+
+    @Query("SELECT * FROM recipe ORDER BY lastUpdated")
+    fun getAllOrderByDate(): Flow<List<Recipe>>
+
     @Query("SELECT * FROM recipe")
-    fun getAll(): Flow<List<Recipe>>
+    fun getAllOrderDefault(): Flow<List<Recipe>>
 
     @Query("SELECT * FROM recipe WHERE uuid like :recipeId")
     fun findRecipeById(recipeId: String): Recipe
