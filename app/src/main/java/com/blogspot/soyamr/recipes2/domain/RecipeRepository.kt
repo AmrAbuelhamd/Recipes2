@@ -7,7 +7,7 @@ import com.blogspot.soyamr.recipes2.domain.entities.model.RecipeDetailedInfo
 import kotlinx.coroutines.flow.Flow
 
 interface RecipeRepository {
-    suspend fun getRecipes(sortType: SortType, keyWord: String): Result<List<Recipe>>
+    suspend fun getRecipes( keyWord: String): Result<List<Recipe>>
     suspend fun getRecipeDetails(id: String): Result<RecipeDetailedInfo>
     suspend fun updateRecipes(): Result<Unit>
 }

@@ -43,7 +43,7 @@ class RecipesListViewModel @Inject constructor(
     private fun getData() {
         viewModelScope.launch {
             _isLoading.value = true
-            getRecipesListUseCase(sortBy, searchKeyWord)
+            getRecipesListUseCase(searchKeyWord)
                 .onSuccess {
                     _recipes.value = it
                 }.onFailure {
@@ -75,8 +75,11 @@ class RecipesListViewModel @Inject constructor(
     }
 
     fun sort(sortTypeBy: SortType) {
-        this.sortBy = sortTypeBy
-        getData()
+        when (sortTypeBy) {
+            SortType.ByName -> _recipes.value = _recipes.value!!.sortedBy { it.name }
+            SortType.ByDate -> _recipes.value = _recipes.value!!.sortedBy { it.lastUpdated }
+            SortType.Nothing ->{}
+        }
     }
 
 

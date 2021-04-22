@@ -18,11 +18,7 @@ interface RecipeDao : BaseDao<RecipeEntity> {
     fun getCount(): Int
 
     @Query(
-        "SELECT * FROM recipeentity " +
-                "where LOWER(name) like :keyword " +
-                "or LOWER(description) like :keyword " +
-                "or LOWER(instructions) like :keyword " +
-                "ORDER BY :sortType"
+        "SELECT * FROM recipeentity where LOWER(name) like :keyword or LOWER(description) like :keyword or LOWER(instructions) like :keyword"
     )
-    fun queryRecipes(sortType: String, keyword: String): List<RecipeEntity>
+    fun queryRecipes(keyword: String): List<RecipeEntity>
 }

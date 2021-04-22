@@ -6,6 +6,6 @@ import javax.inject.Inject
 
 class GetRecipesListUseCaseImpl @Inject constructor(private val recipeRepository: RecipeRepository) :
     GetRecipesListUseCase {
-    override suspend operator fun invoke(sortType: SortType, keyWord: String) =
-        recipeRepository.getRecipes(sortType, keyWord)
+    override suspend operator fun invoke(keyWord: String) =
+        recipeRepository.getRecipes(keyWord)
 }

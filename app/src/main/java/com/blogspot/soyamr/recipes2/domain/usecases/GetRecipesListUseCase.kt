@@ -6,5 +6,5 @@ import com.blogspot.soyamr.recipes2.domain.entities.model.Recipe
 import kotlinx.coroutines.flow.Flow
 
 interface GetRecipesListUseCase {
-    suspend operator fun invoke(sortType: SortType, keyWord: String): Result<List<Recipe>>
+    suspend operator fun invoke(keyWord: String): Result<List<Recipe>>
 }

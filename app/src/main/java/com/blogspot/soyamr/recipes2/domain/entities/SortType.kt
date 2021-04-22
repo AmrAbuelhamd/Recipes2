@@ -2,7 +2,7 @@ package com.blogspot.soyamr.recipes2.domain.entities;
 
 enum class SortType(val key: String) {
     ByName("name;"),
-    ByDate("date;"),
+    ByDate("lastUpdated;"),
     Nothing(";");
 
     companion object {

@@ -22,7 +22,7 @@ class RepositoryImpl @Inject constructor(
 ) :
     RecipeRepository {
 
-    override suspend fun getRecipes(sortType: SortType, keyWord: String): Result<List<Recipe>> =
+    override suspend fun getRecipes(keyWord: String): Result<List<Recipe>> =
         withContext(Dispatchers.IO) {
             if (recipeDao.getCount() == 0) {
                 try {
@@ -31,7 +31,7 @@ class RepositoryImpl @Inject constructor(
                     Failure(HttpError(Throwable(e.message)))
                 }
             }
-            Success(recipeDao.queryRecipes(sortType.key, keyWord.toQueryString()).map { it.toDomain() })
+            Success(recipeDao.queryRecipes(keyWord.toQueryString()).map { it.toDomain() })
         }
 
     override suspend fun getRecipeDetails(id: String): Result<RecipeDetailedInfo> {
