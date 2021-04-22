@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.blogspot.soyamr.recipes2.R
-import com.blogspot.soyamr.recipes2.domain.Constants.KEY
-import com.blogspot.soyamr.recipes2.domain.Sort
+import com.blogspot.soyamr.recipes2.utils.Constants.KEY
+import com.blogspot.soyamr.recipes2.domain.entities.SortType
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 
@@ -22,14 +22,14 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
         view.findViewById<MaterialButton>(R.id.sortByName).setOnClickListener {
             findNavController().previousBackStackEntry?.savedStateHandle?.set<String>(
                 KEY,
-                Sort.ByName.key
+                SortType.ByName.key
             )
             dismiss()
         }
         view.findViewById<MaterialButton>(R.id.sortByDate).setOnClickListener {
             findNavController().previousBackStackEntry?.savedStateHandle?.set<String>(
                 KEY,
-                Sort.ByDate.key
+                SortType.ByDate.key
             )
             dismiss()
         }

@@ -1,23 +1,24 @@
 package com.blogspot.soyamr.recipes2.presentation.recipeslist
 
-import androidx.lifecycle.*
-import com.blogspot.soyamr.recipes2.domain.Sort
-import com.blogspot.soyamr.recipes2.domain.model.onFailure
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.blogspot.soyamr.recipes2.domain.entities.SortType
+import com.blogspot.soyamr.recipes2.domain.entities.model.Recipe
+import com.blogspot.soyamr.recipes2.domain.entities.onFailure
+import com.blogspot.soyamr.recipes2.domain.entities.onSuccess
 import com.blogspot.soyamr.recipes2.domain.usecases.GetRecipesListUseCase
-import com.blogspot.soyamr.recipes2.domain.usecases.QueryRecipes
 import com.blogspot.soyamr.recipes2.domain.usecases.UpdateRecipesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
-import java.util.*
 import javax.inject.Inject
 
 
 @HiltViewModel
 class RecipesListViewModel @Inject constructor(
     private val getRecipesListUseCase: GetRecipesListUseCase,
-    private val updateRecipesUseCase: UpdateRecipesUseCase,
-    private val queryRecipes: QueryRecipes
+    private val updateRecipesUseCase: UpdateRecipesUseCase
 ) :
     ViewModel() {
 
@@ -25,31 +26,28 @@ class RecipesListViewModel @Inject constructor(
     private val _isLoading = MutableLiveData(false)
     val isLoading: LiveData<Boolean> = _isLoading
 
-    private val searchKeyWord = MutableLiveData("")
-    private val sortBy = MutableLiveData(Sort.Nothing)
+    private var searchKeyWord = ""
+    private var sortBy = SortType.Nothing
 
-    val recipes = Transformations.switchMap(searchKeyWord) { string ->
-        if (string.isNullOrEmpty())
-            getRecipesListUseCase(sortBy.value!!)
-                .onStart { _isLoading.value = true }
-                .asLiveData()
-        else
-            queryRecipes(string.toLowerCase(Locale.ROOT))
-                .onStart { _isLoading.value = true }
-                .asLiveData()
-    }
+    private val _recipes = MutableLiveData<List<Recipe>>()
+    val recipes: LiveData<List<Recipe>> = _recipes
 
 
     private val _error: MutableLiveData<String> = MutableLiveData()
     val error: LiveData<String> = _error
 
-
     init {
+        getData()
+    }
+
+    private fun getData() {
         viewModelScope.launch {
             _isLoading.value = true
-            updateRecipesUseCase()
-                .onFailure {
-                    _error.value = it.throwable.message.toString()
+            getRecipesListUseCase(sortBy, searchKeyWord)
+                .onSuccess {
+                    _recipes.value = it
+                }.onFailure {
+                    _error.value = it.throwable.message
                 }
             _isLoading.value = false
         }
@@ -59,6 +57,9 @@ class RecipesListViewModel @Inject constructor(
         viewModelScope.launch {
             _isLoading.value = true
             updateRecipesUseCase()
+                .onSuccess {
+                    getData()
+                }
                 .onFailure {
                     _error.value = it.throwable.message.toString()
                 }
@@ -68,12 +69,14 @@ class RecipesListViewModel @Inject constructor(
 
     fun searchFor(text: String?) {
         text?.let {
-            searchKeyWord.value = it
+            searchKeyWord = it
         }
+        getData()
     }
 
-    fun sort(sortBy: Sort) {
-        this.sortBy.value = sortBy
+    fun sort(sortTypeBy: SortType) {
+        this.sortBy = sortTypeBy
+        getData()
     }
 
 

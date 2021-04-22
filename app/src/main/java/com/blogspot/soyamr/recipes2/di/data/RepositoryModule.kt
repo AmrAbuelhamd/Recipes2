@@ -1,7 +1,7 @@
-package com.blogspot.soyamr.recipes2.data.di
+package com.blogspot.soyamr.recipes2.di.data
 
 import com.blogspot.soyamr.recipes2.data.RepositoryImpl
-import com.blogspot.soyamr.recipes2.domain.Repository
+import com.blogspot.soyamr.recipes2.domain.RecipeRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -14,5 +14,5 @@ import javax.inject.Singleton
 abstract class RepositoryModule {
     @Binds
     @Singleton
-    abstract fun getRepo(repositoryImpl: RepositoryImpl): Repository
+    abstract fun getRepo(repositoryImpl: RepositoryImpl): RecipeRepository
 }

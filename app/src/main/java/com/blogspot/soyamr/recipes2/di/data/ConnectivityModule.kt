@@ -1,4 +1,4 @@
-package com.blogspot.soyamr.recipes2.data.di
+package com.blogspot.soyamr.recipes2.di.data
 
 import com.blogspot.soyamr.recipes2.data.util.Connectivity
 import com.blogspot.soyamr.recipes2.data.util.ConnectivityImpl

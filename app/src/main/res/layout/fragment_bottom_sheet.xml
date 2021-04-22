@@ -44,7 +44,7 @@
         android:insetBottom="0dp"
         android:paddingTop="0dp"
         android:paddingBottom="0dp"
-        android:text="@string/sort_by_name"
+        android:text="@string/sort_by_date"
         android:textAlignment="viewStart"
         android:textColor="#333333"
         app:icon="@drawable/sort_by_date_icon"

@@ -1,9 +1,9 @@
 package com.blogspot.soyamr.recipes2.presentation.recipeitem
 
 import androidx.lifecycle.*
+import com.blogspot.soyamr.recipes2.domain.entities.model.RecipeDetailedInfo
+import com.blogspot.soyamr.recipes2.domain.entities.onSuccess
 import com.blogspot.soyamr.recipes2.domain.usecases.GetRecipeDetailedInfoUseCase
-import com.blogspot.soyamr.recipes2.domain.model.RecipeDetailedInfo
-import com.blogspot.soyamr.recipes2.domain.model.onSuccess
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

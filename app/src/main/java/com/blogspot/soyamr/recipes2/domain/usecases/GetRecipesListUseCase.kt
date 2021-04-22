@@ -1,9 +1,10 @@
 package com.blogspot.soyamr.recipes2.domain.usecases
 
-import com.blogspot.soyamr.recipes2.domain.Sort
-import com.blogspot.soyamr.recipes2.domain.model.RecipeInfo
+import com.blogspot.soyamr.recipes2.domain.entities.Result
+import com.blogspot.soyamr.recipes2.domain.entities.SortType
+import com.blogspot.soyamr.recipes2.domain.entities.model.Recipe
 import kotlinx.coroutines.flow.Flow
 
 interface GetRecipesListUseCase {
-    operator fun invoke(sort: Sort): Flow<List<RecipeInfo>>
+    suspend operator fun invoke(sortType: SortType, keyWord: String): Result<List<Recipe>>
 }

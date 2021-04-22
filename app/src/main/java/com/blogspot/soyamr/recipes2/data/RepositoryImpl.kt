@@ -1,72 +1,57 @@
 package com.blogspot.soyamr.recipes2.data
 
 import com.blogspot.soyamr.recipes2.data.database.dao.RecipeDao
+import com.blogspot.soyamr.recipes2.data.database.dao.RecipeDetailedInfoDao
+import com.blogspot.soyamr.recipes2.data.mappers.local_entity_to_domain_entity.toDomain
+import com.blogspot.soyamr.recipes2.data.mappers.response_to_local_entity.toLocalEntity
 import com.blogspot.soyamr.recipes2.data.network.RecipeApi
-import com.blogspot.soyamr.recipes2.data.util.*
-import com.blogspot.soyamr.recipes2.domain.Repository
-import com.blogspot.soyamr.recipes2.domain.Sort
-import com.blogspot.soyamr.recipes2.domain.model.*
+import com.blogspot.soyamr.recipes2.data.util.toQueryString
+import com.blogspot.soyamr.recipes2.domain.RecipeRepository
+import com.blogspot.soyamr.recipes2.domain.entities.*
+import com.blogspot.soyamr.recipes2.domain.entities.model.Recipe
+import com.blogspot.soyamr.recipes2.domain.entities.model.RecipeDetailedInfo
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
-import java.util.*
 import javax.inject.Inject
-import com.blogspot.soyamr.recipes2.data.network.model.Recipe as dbRecipe
 
 
 class RepositoryImpl @Inject constructor(
     private val recipeDao: RecipeDao,
-    private val api: RecipeApi,
-    private val connectivity: Connectivity
+    private val detailedInfoDao: RecipeDetailedInfoDao,
+    private val api: RecipeApi
 ) :
-    Repository {
+    RecipeRepository {
 
+    override suspend fun getRecipes(sortType: SortType, keyWord: String): Result<List<Recipe>> =
+        withContext(Dispatchers.IO) {
+            if (recipeDao.getCount() == 0) {
+                try {
+                    updateRecipesEntitiesFromServer()
+                } catch (e: Exception) {
+                    Failure(HttpError(Throwable(e.message)))
+                }
+            }
+            Success(recipeDao.queryRecipes(sortType.key, keyWord.toQueryString()).map { it.toDomain() })
+        }
 
-    override fun getRecipes(sort: Sort): Flow<List<RecipeInfo>> =when(sort){
-        Sort.ByName -> recipeDao.getAllOrderByName().map { list -> list.map { it.toDomainRecipeInfo() } }
-        Sort.ByDate -> recipeDao.getAllOrderByDate().map { list -> list.map { it.toDomainRecipeInfo() } }
-        Sort.Nothing -> recipeDao.getAllOrderDefault().map { list -> list.map { it.toDomainRecipeInfo() } }
+    override suspend fun getRecipeDetails(id: String): Result<RecipeDetailedInfo> {
+        TODO("Not yet implemented")
     }
 
-    //update database if it's empty only
+    private suspend fun updateRecipesEntitiesFromServer() {
+        val result = api.getRecipes()
+        recipeDao.insertAll(result.recipes.map { it.toLocalEntity() })
+    }
+
+
     override suspend fun updateRecipes(): Result<Unit> =
         withContext(Dispatchers.IO) {
-            val rowsInDataBase = recipeDao.getCount()
-            if (rowsInDataBase <= 0) {
-                return@withContext updateDataBaseFromApi()
-            } else {
-                return@withContext Success(Unit)
-            }
-        }
-
-    override suspend fun getRecipeDetails(id: String) =
-        withContext(Dispatchers.IO) {
-            Success(recipeDao.findRecipeById(id).toDomainDetailedRecipeInfo())
-        }
-
-    override fun queryRecipes(keyWord: String): Flow<List<RecipeInfo>> =
-        recipeDao.queryRecipes("%$keyWord%").map { list -> list.map { it.toDomainRecipeInfo() } }
-
-
-
-    private suspend fun updateDataBaseFromApi(): Result<Unit> {
-        if (connectivity.hasNetworkAccess()) {
-            val result = try {
-                api.getRecipes()
+            try {
+                updateRecipesEntitiesFromServer()
             } catch (e: Exception) {
-                return Failure(HttpError(Throwable(e.message)))
+                return@withContext Failure(HttpError(Throwable(e.message)))
             }
-            insertDataIntoDataBase(result.recipes)
-            return Success(Unit)
-        } else {
-            return Failure(HttpError(Throwable(NO_INTERNET_CONNECTION)))
+            return@withContext Success(Unit)
         }
-    }
-
-
-    private fun insertDataIntoDataBase(finalResult: List<dbRecipe>) {
-        recipeDao.deleteAll()
-        recipeDao.insertAll(*finalResult.map { it.toDataBaseRecipe() }.toTypedArray())
-    }
 }
+

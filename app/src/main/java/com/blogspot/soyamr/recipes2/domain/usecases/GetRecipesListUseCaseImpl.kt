@@ -1,10 +1,11 @@
 package com.blogspot.soyamr.recipes2.domain.usecases
 
-import com.blogspot.soyamr.recipes2.domain.Repository
-import com.blogspot.soyamr.recipes2.domain.Sort
+import com.blogspot.soyamr.recipes2.domain.RecipeRepository
+import com.blogspot.soyamr.recipes2.domain.entities.SortType
 import javax.inject.Inject
 
-class GetRecipesListUseCaseImpl @Inject constructor(private val repository: Repository) :
+class GetRecipesListUseCaseImpl @Inject constructor(private val recipeRepository: RecipeRepository) :
     GetRecipesListUseCase {
-    override operator fun invoke(sort: Sort) = repository.getRecipes(sort)
+    override suspend operator fun invoke(sortType: SortType, keyWord: String) =
+        recipeRepository.getRecipes(sortType, keyWord)
 }

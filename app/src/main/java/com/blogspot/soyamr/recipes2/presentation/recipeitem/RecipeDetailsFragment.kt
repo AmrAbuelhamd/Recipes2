@@ -12,7 +12,7 @@ import androidx.navigation.ui.setupWithNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.blogspot.soyamr.recipes2.R
 import com.blogspot.soyamr.recipes2.databinding.FragmentRecipeDetailsBinding
-import com.blogspot.soyamr.recipes2.domain.model.RecipeDetailedInfo
+import com.blogspot.soyamr.recipes2.domain.entities.model.RecipeDetailedInfo
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 

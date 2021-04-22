@@ -1,9 +1,11 @@
-package com.blogspot.soyamr.recipes2.data.di
+package com.blogspot.soyamr.recipes2.di.data
 
 import android.content.Context
 import androidx.room.Room
 import com.blogspot.soyamr.recipes2.data.database.RecipeDataBase
 import com.blogspot.soyamr.recipes2.data.database.dao.RecipeDao
+import com.blogspot.soyamr.recipes2.data.database.dao.RecipeDetailedInfoDao
+import com.blogspot.soyamr.recipes2.data.database.dao.ShortRecipeInfoDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,10 +22,16 @@ class DataBaseModule {
         Room.databaseBuilder(
             context,
             RecipeDataBase::class.java, "recipe-database"
-        ).build()
+        ).fallbackToDestructiveMigration().build()
 
     @Provides
     @Singleton
-    fun getCurrencyDao(db: RecipeDataBase): RecipeDao = db.recipeDao()
+    fun getRecipeDao(db: RecipeDataBase): RecipeDao = db.recipeDao()
+    @Provides
+    @Singleton
+    fun getRecipeDetailedInfoDao(db: RecipeDataBase): RecipeDetailedInfoDao = db.recipeDetailedInfoDao()
+    @Provides
+    @Singleton
+    fun getShortRecipeDao(db: RecipeDataBase): ShortRecipeInfoDao = db.shortRecipeDao()
 
 }

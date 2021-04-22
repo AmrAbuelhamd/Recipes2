@@ -5,13 +5,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.blogspot.soyamr.recipes2.data.util.toString
 import com.blogspot.soyamr.recipes2.databinding.RecyclerviewItemBinding
-import com.blogspot.soyamr.recipes2.domain.model.RecipeInfo
+import com.blogspot.soyamr.recipes2.domain.entities.model.Recipe
 import com.squareup.picasso.Picasso
 
 
 class RecipeAdapter(private val listener: (String) -> Unit) :
-    ListAdapter<RecipeInfo, RecipeAdapter.ViewHolder>(CurrencyDiffCallback()) {
+    ListAdapter<Recipe, RecipeAdapter.ViewHolder>(CurrencyDiffCallback()) {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -28,12 +29,13 @@ class RecipeAdapter(private val listener: (String) -> Unit) :
         private val binding: RecyclerviewItemBinding
     ) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(recipeInfo: RecipeInfo) {
+        fun bind(recipe: Recipe) {
             with(binding) {
-                root.setOnClickListener { listener(recipeInfo.uuid) }
-                recipeNameTextView.text = recipeInfo.name
-                descriptionTextView.text = recipeInfo.description
-                Picasso.get().load(recipeInfo.image).into(recipeImageView);
+                root.setOnClickListener { listener(recipe.uuid) }
+                recipeNameTextView.text = recipe.name
+                descriptionTextView.text = recipe.description
+                dateTextView.text = recipe.lastUpdated.toString("dd.MM.yyyy")
+                Picasso.get().load(recipe.image).into(recipeImageView);
             }
         }
 
@@ -49,13 +51,13 @@ class RecipeAdapter(private val listener: (String) -> Unit) :
 }
 
 
-class CurrencyDiffCallback : DiffUtil.ItemCallback<RecipeInfo>() {
-    override fun areItemsTheSame(oldItem: RecipeInfo, newItem: RecipeInfo): Boolean {
+class CurrencyDiffCallback : DiffUtil.ItemCallback<Recipe>() {
+    override fun areItemsTheSame(oldItem: Recipe, newItem: Recipe): Boolean {
         return oldItem.uuid == newItem.uuid
     }
 
 
-    override fun areContentsTheSame(oldItem: RecipeInfo, newItem: RecipeInfo): Boolean {
+    override fun areContentsTheSame(oldItem: Recipe, newItem: Recipe): Boolean {
         return oldItem == newItem
     }
 

@@ -15,12 +15,12 @@
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/recipeImageView"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:shapeAppearanceOverlay="@style/roundedImageView"
+            android:layout_height="0dp"
             android:contentDescription="@string/recipe_photo"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:shapeAppearanceOverlay="@style/roundedImageView"
             tools:src="@android:drawable/alert_dark_frame" />
 
         <TextView
@@ -28,37 +28,55 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
-            android:textStyle="bold"
             android:fontFamily="sans-serif"
-            android:textSize="24sp"
+            android:textColor="#4A4A4A"
+            android:textSize="20sp"
+            android:textStyle="bold"
             app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toTopOf="@id/descriptionTextView"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/recipeImageView"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/recipeImageView"
             app:layout_constraintTop_toTopOf="@id/recipeImageView"
-            tools:text="food image"
-            app:layout_constraintBottom_toTopOf="@id/descriptionTextView"
-            app:layout_constraintVertical_chainStyle="packed"/>
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="food image" />
 
         <TextView
             android:id="@+id/descriptionTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
             android:layout_marginTop="4dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="4dp"
-            android:layout_marginStart="4dp"
+            android:fontFamily="sans-serif"
+            android:maxLines="2"
+            android:textColor="#9C9C9C"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@+id/dateTextView"
             app:layout_constrainedWidth="true"
-            app:layout_constraintBottom_toBottomOf="@id/recipeImageView"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/recipeImageView"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/recipeImageView"
             app:layout_constraintTop_toBottomOf="@id/recipeNameTextView"
             app:layout_constraintVertical_bias="1.0"
             app:layout_constraintVertical_chainStyle="packed"
             tools:text="long " />
+
+        <TextView
+            android:id="@+id/dateTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:fontFamily="sans-serif"
+            android:textColor="#4A4A4A"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@id/recipeImageView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/descriptionTextView"
+            tools:text="01.05.2018" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

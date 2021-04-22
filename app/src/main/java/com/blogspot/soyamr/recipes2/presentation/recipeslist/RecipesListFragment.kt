@@ -10,9 +10,9 @@ import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.blogspot.soyamr.recipes2.R
 import com.blogspot.soyamr.recipes2.databinding.FragmentRecipesListBinding
-import com.blogspot.soyamr.recipes2.domain.Constants.KEY
-import com.blogspot.soyamr.recipes2.domain.Sort
-import com.blogspot.soyamr.recipes2.domain.model.RecipeInfo
+import com.blogspot.soyamr.recipes2.domain.entities.SortType
+import com.blogspot.soyamr.recipes2.domain.entities.model.Recipe
+import com.blogspot.soyamr.recipes2.utils.Constants.KEY
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -34,7 +34,7 @@ class RecipesListFragment : Fragment(R.layout.fragment_recipes_list) {
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<String>(KEY)
             ?.observe(viewLifecycleOwner) {
                 it?.let {
-                    viewModel.sort(Sort.getByKey(it))
+                    viewModel.sort(SortType.getByKey(it))
                 }
             }
     }
@@ -68,8 +68,8 @@ class RecipesListFragment : Fragment(R.layout.fragment_recipes_list) {
         }
     }
 
-    private fun updateRecyclerView(recipeInfo: List<RecipeInfo>?) {
-        recipeInfo.let {
+    private fun updateRecyclerView(recipe: List<Recipe>?) {
+        recipe.let {
             viewBinding.mySwipeToRefresh.isRefreshing = false
             adapter.submitList(it)
         }
