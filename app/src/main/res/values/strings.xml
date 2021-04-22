@@ -9,4 +9,6 @@
     <string name="sort_by_name">Sort By Name</string>
     <string name="sort_by_date">Sort By Date</string>
     <string name="more">More</string>
+    <string name="share">share</string>
+    <string name="like">like</string>
 </resources>

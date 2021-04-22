@@ -5,7 +5,6 @@ import android.text.Html
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
@@ -13,8 +12,8 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.blogspot.soyamr.recipes2.R
 import com.blogspot.soyamr.recipes2.databinding.FragmentRecipeDetailsBinding
 import com.blogspot.soyamr.recipes2.domain.entities.model.RecipeDetailedInfo
+import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 
 @AndroidEntryPoint
 class RecipeDetailsFragment : Fragment(R.layout.fragment_recipe_details) {
@@ -25,7 +24,6 @@ class RecipeDetailsFragment : Fragment(R.layout.fragment_recipe_details) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpViewModelObservers()
-
 
         val navController = findNavController()
         val appBarConfiguration = AppBarConfiguration(navController.graph)
@@ -41,6 +39,7 @@ class RecipeDetailsFragment : Fragment(R.layout.fragment_recipe_details) {
         super.onResume()
         viewBinding.toolbar.title = ""
     }
+
     private fun bindRecipeData(recipeDetailedInfo: RecipeDetailedInfo?) {
         recipeDetailedInfo?.let {
             with(viewBinding) {
@@ -49,12 +48,10 @@ class RecipeDetailsFragment : Fragment(R.layout.fragment_recipe_details) {
                 difficultyTextView.text = it.difficulty.toString()
                 instructionTextView.text =
                     Html.fromHtml(it.instructions, Html.FROM_HTML_MODE_COMPACT)
-                viewPager2.adapter = ViewPagerAdapter(it.images ?: return)
-                viewPager2.setPageTransformer(ZoomOutPageTransformer())
-                lifecycleScope.launchWhenCreated {
-                    delay(500)
-                    viewPager2.setCurrentItem(if (it.images.size >= 2) 1 else 0, true)
-                }
+                viewPager.adapter = ViewPagerAdapter(it.images)
+                TabLayoutMediator(dots, viewPager) { tab, _ ->
+                    viewPager.setCurrentItem(tab.position, true)
+                }.attach()
             }
         }
     }

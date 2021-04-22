@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".presentation.recipeitem.RecipeDetailsFragment">
 
-    <androidx.appcompat.widget.Toolbar
+    <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
@@ -14,16 +14,32 @@
         android:elevation="4dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:theme="@style/BaseTheme"
+        app:menu="@menu/recipe_detailed_screen_menu"
+        android:background="@color/white"
+        app:title=""
         />
     <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/viewPager2"
+        android:id="@+id/viewPager"
         android:layout_width="0dp"
         android:layout_height="300dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
         tools:src="@tools:sample/avatars" />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/dots"
+        android:layout_width="match_parent"
+        android:layout_height="26dp"
+        android:backgroundTint="@android:color/transparent"
+        app:layout_constraintBottom_toBottomOf="@+id/viewPager"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:tabBackground="@drawable/dot_selector"
+        app:tabGravity="center"
+        app:tabIndicatorHeight="0dp"
+        app:tabPaddingEnd="7dp"
+        app:tabPaddingStart="7dp" />
 
     <ScrollView
         android:layout_width="0dp"
@@ -31,7 +47,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/viewPager2">
+        app:layout_constraintTop_toBottomOf="@id/viewPager">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
