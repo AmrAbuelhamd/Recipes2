@@ -5,5 +5,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class  RecipeDetailedInfoResponseWrapper (
-    val recipeDetailedInfo: RecipeDetailedInfoResponse
+    val recipe: RecipeDetailedInfoResponse
 )

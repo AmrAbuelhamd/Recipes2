@@ -1,4 +1,4 @@
-package com.blogspot.soyamr.recipes2.data.util
+package com.blogspot.soyamr.recipes2.data.common.util
 
 import android.content.Context
 import android.net.ConnectivityManager

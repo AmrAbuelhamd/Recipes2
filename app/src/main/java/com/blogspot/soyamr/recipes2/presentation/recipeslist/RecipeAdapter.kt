@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.blogspot.soyamr.recipes2.data.util.toString
+import com.blogspot.soyamr.recipes2.data.common.util.toString
 import com.blogspot.soyamr.recipes2.databinding.RecyclerviewItemBinding
 import com.blogspot.soyamr.recipes2.domain.entities.model.Recipe
 import com.squareup.picasso.Picasso

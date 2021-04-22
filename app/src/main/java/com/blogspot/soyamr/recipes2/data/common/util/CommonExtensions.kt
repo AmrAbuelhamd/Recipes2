@@ -1,4 +1,4 @@
-package com.blogspot.soyamr.recipes2.data.util
+package com.blogspot.soyamr.recipes2.data.common.util
 
 import java.text.SimpleDateFormat
 import java.util.*

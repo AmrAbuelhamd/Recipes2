@@ -1,4 +1,4 @@
-package com.blogspot.soyamr.recipes2.data.mappers.response_to_local_entity
+package com.blogspot.soyamr.recipes2.data.common.mappers.response_to_local_entity
 
 import com.blogspot.soyamr.recipes2.data.database.converters.Ids
 import com.blogspot.soyamr.recipes2.data.database.converters.Photos

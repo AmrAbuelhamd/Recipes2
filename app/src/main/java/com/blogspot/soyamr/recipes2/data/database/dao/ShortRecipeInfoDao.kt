@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 
 
 @Dao
-interface ShortRecipeInfoDao : BaseDao<RecipeEntity> {
+interface ShortRecipeInfoDao : BaseDao<ShortRecipeEntity> {
 
     @Query("SELECT * FROM shortrecipeentity WHERE uuid like :recipeId")
     fun findRecipeById(recipeId: String): ShortRecipeEntity

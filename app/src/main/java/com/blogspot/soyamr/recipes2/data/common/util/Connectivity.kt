@@ -1,4 +1,4 @@
-package com.blogspot.soyamr.recipes2.data.util
+package com.blogspot.soyamr.recipes2.data.common.util
 
 interface Connectivity {
     fun hasNetworkAccess(): Boolean

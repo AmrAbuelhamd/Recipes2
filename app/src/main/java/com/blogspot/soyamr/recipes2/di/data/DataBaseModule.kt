@@ -6,6 +6,7 @@ import com.blogspot.soyamr.recipes2.data.database.RecipeDataBase
 import com.blogspot.soyamr.recipes2.data.database.dao.RecipeDao
 import com.blogspot.soyamr.recipes2.data.database.dao.RecipeDetailedInfoDao
 import com.blogspot.soyamr.recipes2.data.database.dao.ShortRecipeInfoDao
+import com.blogspot.soyamr.recipes2.data.database.managers.CacheManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,11 +28,22 @@ class DataBaseModule {
     @Provides
     @Singleton
     fun getRecipeDao(db: RecipeDataBase): RecipeDao = db.recipeDao()
+
     @Provides
     @Singleton
-    fun getRecipeDetailedInfoDao(db: RecipeDataBase): RecipeDetailedInfoDao = db.recipeDetailedInfoDao()
+    fun getRecipeDetailedInfoDao(db: RecipeDataBase): RecipeDetailedInfoDao =
+        db.recipeDetailedInfoDao()
+
     @Provides
     @Singleton
     fun getShortRecipeDao(db: RecipeDataBase): ShortRecipeInfoDao = db.shortRecipeDao()
+
+    @Provides
+    @Singleton
+    fun getCacheManager(
+        recipeDao: RecipeDao,
+        recipeDetailedInfoDao: RecipeDetailedInfoDao,
+        shortRecipeInfoDao: ShortRecipeInfoDao
+    ): CacheManager = CacheManager(recipeDao, recipeDetailedInfoDao, shortRecipeInfoDao)
 
 }

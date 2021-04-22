@@ -27,7 +27,6 @@ class RecipesListViewModel @Inject constructor(
     val isLoading: LiveData<Boolean> = _isLoading
 
     private var searchKeyWord = ""
-    private var sortBy = SortType.Nothing
 
     private val _recipes = MutableLiveData<List<Recipe>>()
     val recipes: LiveData<List<Recipe>> = _recipes

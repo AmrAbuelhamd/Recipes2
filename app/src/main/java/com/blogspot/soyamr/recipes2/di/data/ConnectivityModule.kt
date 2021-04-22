@@ -1,7 +1,7 @@
 package com.blogspot.soyamr.recipes2.di.data
 
-import com.blogspot.soyamr.recipes2.data.util.Connectivity
-import com.blogspot.soyamr.recipes2.data.util.ConnectivityImpl
+import com.blogspot.soyamr.recipes2.data.common.util.Connectivity
+import com.blogspot.soyamr.recipes2.data.common.util.ConnectivityImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
