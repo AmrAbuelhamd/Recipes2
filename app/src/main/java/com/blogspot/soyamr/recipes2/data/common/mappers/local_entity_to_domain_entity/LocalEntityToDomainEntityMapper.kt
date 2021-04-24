@@ -9,7 +9,7 @@ import javax.inject.Inject
 class LocalEntityToDomainEntityMapper @Inject constructor(
 private val shortRecipeInfoDao: ShortRecipeInfoDao
 ) {
-    suspend fun RecipeDetailedInfoEntity.toDomain() = RecipeDetailedInfo(
+    fun RecipeDetailedInfoEntity.toDomain() = RecipeDetailedInfo(
         name,
         images.urls,
         Date((lastUpdated.toString() + "000").toLong()),

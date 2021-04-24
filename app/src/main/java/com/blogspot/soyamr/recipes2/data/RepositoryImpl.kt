@@ -54,6 +54,7 @@ class RepositoryImpl @Inject constructor(
     override suspend fun updateRecipes(): Result<Unit> =
         withContext(Dispatchers.IO) {
             try {
+                //todo clear database
                 updateRecipesEntitiesFromServer()
             } catch (e: Exception) {
                 return@withContext Failure(HttpError(Throwable(e.message)))

@@ -21,14 +21,27 @@ class RecipeDetailsFragment : Fragment(R.layout.fragment_recipe_details) {
 
     private val viewModel: RecipeItemViewModel by viewModels()
     private val viewBinding: FragmentRecipeDetailsBinding by viewBinding()
+    private lateinit var adapter: RecommendedRecipeAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpViewModelObservers()
-
+        setUpRecycler()
         val navController = findNavController()
         val appBarConfiguration = AppBarConfiguration(navController.graph)
         viewBinding.toolbar.setupWithNavController(navController, appBarConfiguration)
+    }
+
+    private fun setUpRecycler() {
+        adapter = RecommendedRecipeAdapter() { id: String ->
+            findNavController()
+                .navigate(
+                    RecipeDetailsFragmentDirections.actionRecipeDetailsFragmentSelf(
+                        id
+                    )
+                )
+        }
+        viewBinding.recyclerView.adapter = adapter
     }
 
     private fun setUpViewModelObservers() {
@@ -54,6 +67,11 @@ class RecipeDetailsFragment : Fragment(R.layout.fragment_recipe_details) {
                 TabLayoutMediator(dots, viewPager) { tab, _ ->
                     viewPager.setCurrentItem(tab.position, true)
                 }.attach()
+                if (it.similar.isNullOrEmpty()) {
+                    recyclerView.visibility = View.GONE
+                    recommendedText.visibility = View.INVISIBLE
+                } else
+                    adapter.submitList(it.similar)
             }
         }
     }
