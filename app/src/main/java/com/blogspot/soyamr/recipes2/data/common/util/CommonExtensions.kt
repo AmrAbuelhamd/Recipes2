@@ -5,7 +5,7 @@ import java.util.*
 
 
 fun String.toQueryString() = "%$this%"
-fun Date.toString(format: String = "dd.mm.yyyy", locale: Locale = Locale.getDefault()): String {
+fun Date.toDateString(format: String = "dd.MM.yyyy", locale: Locale = Locale.getDefault()): String {
     val formatter = SimpleDateFormat(format, locale)
     return formatter.format(this)
 }

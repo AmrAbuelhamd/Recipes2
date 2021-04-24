@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.blogspot.soyamr.recipes2.data.common.util.toString
+import com.blogspot.soyamr.recipes2.data.common.util.toDateString
 import com.blogspot.soyamr.recipes2.databinding.RecyclerviewItemBinding
 import com.blogspot.soyamr.recipes2.domain.entities.model.Recipe
 import com.squareup.picasso.Picasso
@@ -34,7 +34,7 @@ class RecipeAdapter(private val listener: (String) -> Unit) :
                 root.setOnClickListener { listener(recipe.uuid) }
                 recipeNameTextView.text = recipe.name
                 descriptionTextView.text = recipe.description
-                dateTextView.text = recipe.lastUpdated.toString("dd.MM.yyyy")
+                dateTextView.text = recipe.lastUpdated.toDateString("dd.MM.yyyy")
                 Picasso.get().load(recipe.image).into(recipeImageView);
             }
         }

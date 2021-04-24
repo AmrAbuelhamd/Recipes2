@@ -10,6 +10,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.blogspot.soyamr.recipes2.R
+import com.blogspot.soyamr.recipes2.data.common.util.toDateString
 import com.blogspot.soyamr.recipes2.databinding.FragmentRecipeDetailsBinding
 import com.blogspot.soyamr.recipes2.domain.entities.model.RecipeDetailedInfo
 import com.google.android.material.tabs.TabLayoutMediator
@@ -45,7 +46,8 @@ class RecipeDetailsFragment : Fragment(R.layout.fragment_recipe_details) {
             with(viewBinding) {
                 nameTextView.text = it.name
                 detailsDescriptionTextView.text = it.description
-                difficultyTextView.text = it.difficulty.toString()
+                ratingBar.rating = it.difficulty.toFloat()
+                dateTextView.text = it.lastUpdated.toDateString()
                 instructionTextView.text =
                     Html.fromHtml(it.instructions, Html.FROM_HTML_MODE_COMPACT)
                 viewPager.adapter = ViewPagerAdapter(it.images)
