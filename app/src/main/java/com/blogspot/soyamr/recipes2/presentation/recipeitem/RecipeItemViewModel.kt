@@ -41,7 +41,6 @@ class RecipeItemViewModel @Inject constructor(
         }
 
     init {
-        _isLoading.value = true
         refresh()
     }
 

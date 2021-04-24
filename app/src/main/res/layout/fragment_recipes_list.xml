@@ -9,11 +9,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <include
-            android:id="@+id/noInternetStateLayout"
-            android:visibility="gone"
-            layout="@layout/no_internet_connection_layout" />
-
         <androidx.constraintlayout.widget.Group
             android:id="@+id/viewsOnScreen"
             android:layout_width="match_parent"
@@ -42,6 +37,11 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolBar" />
 
+
+        <include
+            android:id="@+id/noInternetStateLayout"
+            android:visibility="gone"
+            layout="@layout/no_internet_connection_layout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
