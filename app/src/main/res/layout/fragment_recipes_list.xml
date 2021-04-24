@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/mySwipeToRefresh"
@@ -10,6 +9,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <include
+            android:id="@+id/noInternetStateLayout"
+            android:visibility="gone"
+            layout="@layout/no_internet_connection_layout" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/viewsOnScreen"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:constraint_referenced_ids="toolBar,list"/>
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolBar"

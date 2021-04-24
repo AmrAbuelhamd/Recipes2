@@ -3,6 +3,7 @@ package com.blogspot.soyamr.recipes2.presentation.recipeitem
 import android.os.Bundle
 import android.text.Html
 import android.view.View
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -12,7 +13,9 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.blogspot.soyamr.recipes2.R
 import com.blogspot.soyamr.recipes2.data.common.util.toDateString
 import com.blogspot.soyamr.recipes2.databinding.FragmentRecipeDetailsBinding
+import com.blogspot.soyamr.recipes2.databinding.NoInternetConnectionLayoutBinding
 import com.blogspot.soyamr.recipes2.domain.entities.model.RecipeDetailedInfo
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -22,14 +25,24 @@ class RecipeDetailsFragment : Fragment(R.layout.fragment_recipe_details) {
     private val viewModel: RecipeItemViewModel by viewModels()
     private val viewBinding: FragmentRecipeDetailsBinding by viewBinding()
     private lateinit var adapter: RecommendedRecipeAdapter
+    private lateinit var errorState: NoInternetConnectionLayoutBinding
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        errorState = viewBinding.noInternetStateLayout
+
+        setUpListeners()
         setUpViewModelObservers()
         setUpRecycler()
         val navController = findNavController()
         val appBarConfiguration = AppBarConfiguration(navController.graph)
         viewBinding.toolbar.setupWithNavController(navController, appBarConfiguration)
+    }
+
+    private fun setUpListeners() {
+        errorState.root.findViewById<MaterialButton>(R.id.refreshButton).setOnClickListener {
+            viewModel.refresh()
+        }
     }
 
     private fun setUpRecycler() {
@@ -44,9 +57,37 @@ class RecipeDetailsFragment : Fragment(R.layout.fragment_recipe_details) {
         viewBinding.recyclerView.adapter = adapter
     }
 
+    private fun showErrorScreen(isShowing: Boolean = true) {
+        if (!isShowing) {
+            errorState.root.visibility = View.GONE
+            viewBinding.viewsOnScreen.visibility = View.VISIBLE
+        } else {
+            errorState.root.visibility = View.VISIBLE
+            viewBinding.viewsOnScreen.visibility = View.GONE
+        }
+    }
+
     private fun setUpViewModelObservers() {
         viewModel.isLoading.observe(viewLifecycleOwner, ::changeLoadingState)
         viewModel.recipe.observe(viewLifecycleOwner, ::bindRecipeData)
+        viewModel.noInternetException.observe(viewLifecycleOwner, ::showNoInternetError)
+        viewModel.somethingWentWrong.observe(viewLifecycleOwner, ::showSomethingWentWrong)
+    }
+
+    private fun showNoInternetError(unit: Unit?) {
+        showErrorScreen()
+        errorState.root.findViewById<TextView>(R.id.errorTitleTextView).text =
+            getText(R.string.no_internet)
+        errorState.root.findViewById<TextView>(R.id.errorTitleDetailsTextView).text =
+            getText(R.string.no_internet_text)
+    }
+
+    private fun showSomethingWentWrong(unit: Unit?) {
+        showErrorScreen()
+        errorState.root.findViewById<TextView>(R.id.errorTitleTextView).text =
+            getText(R.string.something_went_wrong)
+        errorState.root.findViewById<TextView>(R.id.errorTitleDetailsTextView).text =
+            getText(R.string.something_went_wrong_text)
     }
 
     override fun onResume() {
@@ -56,6 +97,7 @@ class RecipeDetailsFragment : Fragment(R.layout.fragment_recipe_details) {
 
     private fun bindRecipeData(recipeDetailedInfo: RecipeDetailedInfo?) {
         recipeDetailedInfo?.let {
+            showErrorScreen(false)
             with(viewBinding) {
                 nameTextView.text = it.name
                 detailsDescriptionTextView.text = it.description

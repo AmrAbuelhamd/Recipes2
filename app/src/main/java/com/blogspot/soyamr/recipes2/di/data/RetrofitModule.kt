@@ -1,7 +1,7 @@
 package com.blogspot.soyamr.recipes2.di.data
 
-import com.blogspot.soyamr.recipes2.data.network.RecipeApi
 import com.blogspot.soyamr.recipes2.data.common.util.Connectivity
+import com.blogspot.soyamr.recipes2.data.network.RecipeApi
 import com.blogspot.soyamr.recipes2.utils.Constants
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
@@ -13,6 +13,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import java.io.IOException
 import javax.inject.Singleton
 
 
@@ -34,7 +35,7 @@ object RetrofitModule {
                 ).addInterceptor { chain ->
                     val request = chain.request()
                     if (!connectivity.hasNetworkAccess()) {
-                        throw Exception(Constants.NO_INTERNET_CONNECTION)
+                        throw IOException(Constants.NO_INTERNET_CONNECTION)
                     }
                     chain.proceed(request)
                 }.build()

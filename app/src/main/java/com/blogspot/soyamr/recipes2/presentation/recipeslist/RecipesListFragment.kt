@@ -2,7 +2,7 @@ package com.blogspot.soyamr.recipes2.presentation.recipeslist
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
+import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -10,9 +10,11 @@ import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.blogspot.soyamr.recipes2.R
 import com.blogspot.soyamr.recipes2.databinding.FragmentRecipesListBinding
+import com.blogspot.soyamr.recipes2.databinding.NoInternetConnectionLayoutBinding
 import com.blogspot.soyamr.recipes2.domain.entities.SortType
 import com.blogspot.soyamr.recipes2.domain.entities.model.Recipe
 import com.blogspot.soyamr.recipes2.utils.Constants.KEY
+import com.google.android.material.button.MaterialButton
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -21,9 +23,11 @@ class RecipesListFragment : Fragment(R.layout.fragment_recipes_list) {
     val viewModel: RecipesListViewModel by viewModels()
     private val viewBinding: FragmentRecipesListBinding by viewBinding()
     private lateinit var adapter: RecipeAdapter
+    private lateinit var errorState: NoInternetConnectionLayoutBinding
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        errorState = viewBinding.noInternetStateLayout
         setUpRecycler()
         setUpClickListeners()
         setUpViewModelObservers()
@@ -42,6 +46,7 @@ class RecipesListFragment : Fragment(R.layout.fragment_recipes_list) {
 
     private fun setUpRecycler() {
         adapter = RecipeAdapter() { id: String ->
+            viewBinding.toolBar.findViewById<SearchView>(R.id.searchBar).clearFocus()
             findNavController()
                 .navigate(
                     RecipesListFragmentDirections.actionRecipesListFragmentToRecipeDetailsFragment(
@@ -56,22 +61,42 @@ class RecipesListFragment : Fragment(R.layout.fragment_recipes_list) {
     private fun setUpViewModelObservers() {
         viewModel.isLoading.observe(viewLifecycleOwner, ::changeLoadingState)
         viewModel.recipes.observe(viewLifecycleOwner, ::updateRecyclerView)
-        viewModel.error.observe(viewLifecycleOwner, ::showError)
+        viewModel.noInternetException.observe(viewLifecycleOwner, ::showNoInternetError)
+        viewModel.somethingWentWrong.observe(viewLifecycleOwner, ::showSomethingWentWrong)
     }
 
-
-    private fun showError(error: String?) {
-        error?.let {
-            if (error.isNotEmpty()) {
-                Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
-            }
-        }
+    private fun showNoInternetError(unit: Unit?) {
+        showErrorScreen()
+        errorState.root.findViewById<TextView>(R.id.errorTitleTextView).text =
+            getText(R.string.no_internet)
+        errorState.root.findViewById<TextView>(R.id.errorTitleDetailsTextView).text =
+            getText(R.string.no_internet_text)
     }
+
+    private fun showSomethingWentWrong(unit: Unit?) {
+        showErrorScreen()
+        errorState.root.findViewById<TextView>(R.id.errorTitleTextView).text =
+            getText(R.string.something_went_wrong)
+        errorState.root.findViewById<TextView>(R.id.errorTitleDetailsTextView).text =
+            getText(R.string.something_went_wrong_text)
+    }
+
 
     private fun updateRecyclerView(recipe: List<Recipe>?) {
         recipe.let {
             viewBinding.mySwipeToRefresh.isRefreshing = false
             adapter.submitList(it)
+            showErrorScreen(false)
+        }
+    }
+
+    private fun showErrorScreen(isShowing: Boolean = true) {
+        if (!isShowing) {
+            errorState.root.visibility = View.GONE
+            viewBinding.viewsOnScreen.visibility = View.VISIBLE
+        } else {
+            errorState.root.visibility = View.VISIBLE
+            viewBinding.viewsOnScreen.visibility = View.GONE
         }
     }
 
@@ -105,6 +130,10 @@ class RecipesListFragment : Fragment(R.layout.fragment_recipes_list) {
                     findNavController().navigate(RecipesListFragmentDirections.actionRecipesListFragmentToBottomSheetFragment())
                 }
                 true
+            }
+
+            errorState.root.findViewById<MaterialButton>(R.id.refreshButton).setOnClickListener {
+                viewModel.updateData()
             }
         }
     }

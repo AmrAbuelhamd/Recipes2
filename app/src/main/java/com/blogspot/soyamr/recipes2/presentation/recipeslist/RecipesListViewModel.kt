@@ -6,12 +6,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.blogspot.soyamr.recipes2.domain.entities.SortType
 import com.blogspot.soyamr.recipes2.domain.entities.model.Recipe
-import com.blogspot.soyamr.recipes2.domain.entities.onFailure
 import com.blogspot.soyamr.recipes2.domain.entities.onSuccess
 import com.blogspot.soyamr.recipes2.domain.usecases.GetRecipesListUseCase
 import com.blogspot.soyamr.recipes2.domain.usecases.UpdateRecipesUseCase
+import com.blogspot.soyamr.recipes2.utils.Constants
+import com.blogspot.soyamr.recipes2.utils.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 
@@ -32,39 +36,47 @@ class RecipesListViewModel @Inject constructor(
     val recipes: LiveData<List<Recipe>> = _recipes
 
 
-    private val _error: MutableLiveData<String> = MutableLiveData()
-    val error: LiveData<String> = _error
+    val somethingWentWrong = SingleLiveEvent<Unit>()
+    val noInternetException = SingleLiveEvent<Unit>()
+
+    private val exceptionHandler =
+        CoroutineExceptionHandler() { _, exception ->
+            viewModelScope.launch(Dispatchers.Main) {
+                if (exception.message == Constants.NO_INTERNET_CONNECTION)
+                    noInternetException()
+                else
+                    somethingWentWrong()
+                _isLoading.value = false
+            }
+        }
 
     init {
+        _isLoading.value = true
         getData()
     }
 
     private fun getData() {
-        viewModelScope.launch {
-            _isLoading.value = true
+        viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
             getRecipesListUseCase(searchKeyWord)
                 .onSuccess {
-                    _recipes.value = it
-                }.onFailure {
-                    _error.value = it.throwable.message
+                    withContext(Dispatchers.Main) {
+                        _isLoading.value = false
+                        _recipes.value = it
+                    }
                 }
-            _isLoading.value = false
         }
     }
 
     fun updateData() {
-        viewModelScope.launch {
-            _isLoading.value = true
+        _isLoading.value = true
+        viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
             updateRecipesUseCase()
                 .onSuccess {
                     getData()
                 }
-                .onFailure {
-                    _error.value = it.throwable.message.toString()
-                }
-            _isLoading.value = false
         }
     }
+
 
     fun searchFor(text: String?) {
         text?.let {
@@ -77,7 +89,8 @@ class RecipesListViewModel @Inject constructor(
         when (sortTypeBy) {
             SortType.ByName -> _recipes.value = _recipes.value!!.sortedBy { it.name }
             SortType.ByDate -> _recipes.value = _recipes.value!!.sortedBy { it.lastUpdated }
-            SortType.Nothing ->{}
+            SortType.Nothing -> {
+            }
         }
     }
 

@@ -33,7 +33,7 @@ class SingleLiveEvent<T> : MutableLiveData<T>() {
      * Used for cases where T is Void, to make calls cleaner.
      */
     @MainThread
-    fun call() {
+    operator fun invoke() {
         value = null
     }
     companion object {
