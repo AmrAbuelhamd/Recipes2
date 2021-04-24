@@ -2,7 +2,6 @@ package com.blogspot.soyamr.recipes2.presentation.recipeitem
 
 import androidx.lifecycle.*
 import com.blogspot.soyamr.recipes2.domain.entities.model.RecipeDetailedInfo
-import com.blogspot.soyamr.recipes2.domain.entities.onSuccess
 import com.blogspot.soyamr.recipes2.domain.usecases.GetRecipeDetailedInfoUseCase
 import com.blogspot.soyamr.recipes2.utils.Constants
 import com.blogspot.soyamr.recipes2.utils.SingleLiveEvent

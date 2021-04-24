@@ -8,11 +8,10 @@ import com.blogspot.soyamr.recipes2.data.database.dao.RecipeDetailedInfoDao
 import com.blogspot.soyamr.recipes2.data.database.managers.CacheManager
 import com.blogspot.soyamr.recipes2.data.network.RecipeApi
 import com.blogspot.soyamr.recipes2.domain.RecipeRepository
-import com.blogspot.soyamr.recipes2.domain.entities.Result
-import com.blogspot.soyamr.recipes2.domain.entities.Success
 import com.blogspot.soyamr.recipes2.domain.entities.model.Recipe
 import com.blogspot.soyamr.recipes2.domain.entities.model.RecipeDetailedInfo
 import javax.inject.Inject
+import kotlin.Result.Companion.success
 
 
 class RepositoryImpl @Inject constructor(
@@ -28,7 +27,7 @@ class RepositoryImpl @Inject constructor(
         if (recipeDao.getCount() == 0) {
             updateRecipesEntitiesFromServer()
         }
-        return Success(recipeDao.queryRecipes(keyWord.toQueryString()).map { it.toDomain() })
+        return success(recipeDao.queryRecipes(keyWord.toQueryString()).map { it.toDomain() })
     }
 
     override suspend fun getRecipeDetails(id: String): Result<RecipeDetailedInfo> =
@@ -40,13 +39,13 @@ class RepositoryImpl @Inject constructor(
                     }
                 }
             }
-            Success(detailedInfoDao.findRecipeById(id)!!.toDomain())
+            success(detailedInfoDao.findRecipeById(id)!!.toDomain())
         }
 
     override suspend fun updateRecipes(): Result<Unit> {
         //todo clear database
         updateRecipesEntitiesFromServer()
-        return Success(Unit)
+        return success(Unit)
     }
 
     private suspend fun updateRecipesEntitiesFromServer() {

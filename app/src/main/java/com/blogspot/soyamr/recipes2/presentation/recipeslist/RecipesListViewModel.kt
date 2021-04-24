@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.blogspot.soyamr.recipes2.domain.entities.SortType
 import com.blogspot.soyamr.recipes2.domain.entities.model.Recipe
-import com.blogspot.soyamr.recipes2.domain.entities.onSuccess
 import com.blogspot.soyamr.recipes2.domain.usecases.GetRecipesListUseCase
 import com.blogspot.soyamr.recipes2.domain.usecases.UpdateRecipesUseCase
 import com.blogspot.soyamr.recipes2.utils.Constants
