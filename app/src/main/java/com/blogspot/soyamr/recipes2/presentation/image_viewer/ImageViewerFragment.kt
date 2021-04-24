@@ -1,15 +1,22 @@
 package com.blogspot.soyamr.recipes2.presentation.image_viewer
 
+import android.Manifest
+import android.annotation.TargetApi
 import android.app.DownloadManager
 import android.content.Context
+import android.content.pm.PackageManager
 import android.database.Cursor
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.blogspot.soyamr.recipes2.databinding.FragmentImageViewerBinding
@@ -31,10 +38,11 @@ class ImageViewerFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         Picasso.get().load(args.url).into(viewBinding.imageView);
         viewBinding.downloadButton.setOnClickListener {
-
-            downloadImage(args.url)
-
-
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                askPermissions()
+            } else {
+                downloadImage(args.url)
+            }
         }
     }
 
@@ -42,6 +50,8 @@ class ImageViewerFragment : Fragment() {
     var lastMsg = ""
     private fun downloadImage(url: String) {
         viewBinding.downloadButton.isEnabled = false
+        viewBinding.progressBar.visibility = View.VISIBLE
+
         val directory = File(Environment.DIRECTORY_PICTURES)
 
         if (!directory.exists()) {
@@ -74,9 +84,14 @@ class ImageViewerFragment : Fragment() {
                 }
                 val status = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
                 msg = statusMessage(url, directory, status)
-                if (msg != lastMsg) {
+                if (status == DownloadManager.STATUS_SUCCESSFUL
+                    || status == DownloadManager.STATUS_PAUSED
+                    || status == DownloadManager.STATUS_FAILED
+                ) {
                     withContext(Dispatchers.Main) {
                         Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
+                        viewBinding.downloadButton.isEnabled = true
+                        viewBinding.progressBar.visibility = View.GONE
                     }
                 }
                 lastMsg = msg ?: ""
@@ -94,10 +109,6 @@ class ImageViewerFragment : Fragment() {
             DownloadManager.STATUS_PENDING -> "Pending"
             DownloadManager.STATUS_RUNNING -> "Downloading..."
             DownloadManager.STATUS_SUCCESSFUL -> {
-                GlobalScope.launch(Dispatchers.Main) {
-                    viewBinding.downloadButton.isEnabled = true
-                }
-
                 "Image downloaded successfully in $directory" + File.separator + url.substring(
                     url.lastIndexOf("/") + 1
                 )
@@ -107,6 +118,63 @@ class ImageViewerFragment : Fragment() {
         return msg
     }
 
+    @TargetApi(Build.VERSION_CODES.M)
+    fun askPermissions() {
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(
+                    requireActivity(),
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                )
+            ) {
+                AlertDialog.Builder(requireContext())
+                    .setTitle("Permission required")
+                    .setMessage("Permission required to save photos from the Web.")
+                    .setPositiveButton("Accept") { dialog, id ->
+                        ActivityCompat.requestPermissions(
+                            requireActivity(),
+                            arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                            MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE
+                        )
+                        requireActivity().finish()
+                    }
+                    .setNegativeButton("Deny") { dialog, id -> dialog.cancel() }
+                    .show()
+            } else {
+                // No explanation needed, we can request the permission.
+                ActivityCompat.requestPermissions(
+                    requireActivity(),
+                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                    MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE
+                )
+            }
+        } else {
+            downloadImage(args.url)
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        when (requestCode) {
+            MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE -> {
+                // If request is cancelled, the result arrays are empty.
+                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    downloadImage(args.url)
+                }
+                return
+            }
+        }
+    }
+
+    companion object {
+        private const val MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 1
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

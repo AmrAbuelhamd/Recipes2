@@ -29,14 +29,7 @@ class RecipesListFragment : Fragment() {
     private lateinit var adapter: RecipeAdapter
     private lateinit var errorState: NoInternetConnectionLayoutBinding
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentRecipesListBinding.inflate(inflater, container, false)
-        return viewBinding.root
-    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         errorState = viewBinding.noInternetStateLayout
@@ -148,5 +141,14 @@ class RecipesListFragment : Fragment() {
                 viewModel.updateData()
             }
         }
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentRecipesListBinding.inflate(inflater, container, false)
+        return viewBinding.root
     }
 }
