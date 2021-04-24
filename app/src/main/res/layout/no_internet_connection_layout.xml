@@ -38,7 +38,7 @@
         android:layout_marginEnd="32dp"
         android:fontFamily="sans-serif"
         android:text="@string/refresh"
-        android:textColor="#4A90E2"
+        android:textColor="@color/blu"
         app:strokeColor="#4A90E2" />
 
 </LinearLayout>
