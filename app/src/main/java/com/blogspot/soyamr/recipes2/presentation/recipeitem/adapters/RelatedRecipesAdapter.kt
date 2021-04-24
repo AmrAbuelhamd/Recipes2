@@ -1,4 +1,4 @@
-package com.blogspot.soyamr.recipes2.presentation.recipeitem.recycler
+package com.blogspot.soyamr.recipes2.presentation.recipeitem.adapters
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil

@@ -16,7 +16,8 @@ import com.blogspot.soyamr.recipes2.data.common.util.toDateString
 import com.blogspot.soyamr.recipes2.databinding.FragmentRecipeDetailsBinding
 import com.blogspot.soyamr.recipes2.databinding.NoInternetConnectionLayoutBinding
 import com.blogspot.soyamr.recipes2.domain.entities.model.RecipeDetailedInfo
-import com.blogspot.soyamr.recipes2.presentation.recipeitem.recycler.RecommendedRecipeAdapter
+import com.blogspot.soyamr.recipes2.presentation.recipeitem.adapters.RecommendedRecipeAdapter
+import com.blogspot.soyamr.recipes2.presentation.recipeitem.adapters.ViewPagerAdapter
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
@@ -120,15 +121,24 @@ class RecipeDetailsFragment : Fragment() {
                 dateTextView.text = it.lastUpdated.toDateString()
                 instructionTextView.text =
                     Html.fromHtml(it.instructions, Html.FROM_HTML_MODE_COMPACT)
-                viewPager.adapter = ViewPagerAdapter(it.images)
+                viewPager.adapter = ViewPagerAdapter(it.images) { url: String ->
+                    findNavController()
+                        .navigate(
+                            RecipeDetailsFragmentDirections.actionRecipeDetailsFragmentToImageViewerFragment(
+                                url
+                            )
+                        )
+                }
+
                 TabLayoutMediator(dots, viewPager) { tab, _ ->
                     viewPager.setCurrentItem(tab.position, true)
                 }.attach()
                 if (it.similar.isNullOrEmpty()) {
                     recyclerView.visibility = View.GONE
                     recommendedText.visibility = View.INVISIBLE
-                } else
+                } else {
                     adapter.submitList(it.similar)
+                }
             }
         }
     }
