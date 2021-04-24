@@ -16,6 +16,7 @@ import com.blogspot.soyamr.recipes2.data.common.util.toDateString
 import com.blogspot.soyamr.recipes2.databinding.FragmentRecipeDetailsBinding
 import com.blogspot.soyamr.recipes2.databinding.NoInternetConnectionLayoutBinding
 import com.blogspot.soyamr.recipes2.domain.entities.model.RecipeDetailedInfo
+import com.blogspot.soyamr.recipes2.presentation.recipeitem.recycler.RecommendedRecipeAdapter
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint

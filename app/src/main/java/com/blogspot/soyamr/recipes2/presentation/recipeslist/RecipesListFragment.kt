@@ -14,6 +14,7 @@ import com.blogspot.soyamr.recipes2.databinding.FragmentRecipesListBinding
 import com.blogspot.soyamr.recipes2.databinding.NoInternetConnectionLayoutBinding
 import com.blogspot.soyamr.recipes2.domain.entities.SortType
 import com.blogspot.soyamr.recipes2.domain.entities.model.Recipe
+import com.blogspot.soyamr.recipes2.presentation.recipeslist.recycler.RecipeAdapter
 import com.blogspot.soyamr.recipes2.utils.Constants.KEY
 import com.google.android.material.button.MaterialButton
 import dagger.hilt.android.AndroidEntryPoint
