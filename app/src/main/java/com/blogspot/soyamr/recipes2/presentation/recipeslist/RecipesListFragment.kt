@@ -1,13 +1,14 @@
 package com.blogspot.soyamr.recipes2.presentation.recipeslist
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import by.kirich1409.viewbindingdelegate.viewBinding
 import com.blogspot.soyamr.recipes2.R
 import com.blogspot.soyamr.recipes2.databinding.FragmentRecipesListBinding
 import com.blogspot.soyamr.recipes2.databinding.NoInternetConnectionLayoutBinding
@@ -18,13 +19,23 @@ import com.google.android.material.button.MaterialButton
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class RecipesListFragment : Fragment(R.layout.fragment_recipes_list) {
+class RecipesListFragment : Fragment() {
 
     val viewModel: RecipesListViewModel by viewModels()
-    private val viewBinding: FragmentRecipesListBinding by viewBinding()
+    private var _binding: FragmentRecipesListBinding? = null
+    private val viewBinding get() = _binding!!
+
     private lateinit var adapter: RecipeAdapter
     private lateinit var errorState: NoInternetConnectionLayoutBinding
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentRecipesListBinding.inflate(inflater, container, false)
+        return viewBinding.root
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         errorState = viewBinding.noInternetStateLayout

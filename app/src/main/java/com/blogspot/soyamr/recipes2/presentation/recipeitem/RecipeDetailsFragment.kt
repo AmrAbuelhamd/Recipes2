@@ -2,14 +2,15 @@ package com.blogspot.soyamr.recipes2.presentation.recipeitem
 
 import android.os.Bundle
 import android.text.Html
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
-import by.kirich1409.viewbindingdelegate.viewBinding
 import com.blogspot.soyamr.recipes2.R
 import com.blogspot.soyamr.recipes2.data.common.util.toDateString
 import com.blogspot.soyamr.recipes2.databinding.FragmentRecipeDetailsBinding
@@ -20,12 +21,23 @@ import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class RecipeDetailsFragment : Fragment(R.layout.fragment_recipe_details) {
+class RecipeDetailsFragment : Fragment() {
 
     private val viewModel: RecipeItemViewModel by viewModels()
-    private val viewBinding: FragmentRecipeDetailsBinding by viewBinding()
+    private var _binding: FragmentRecipeDetailsBinding? = null
+    private val viewBinding get() = _binding!!
+
     private lateinit var adapter: RecommendedRecipeAdapter
     private lateinit var errorState: NoInternetConnectionLayoutBinding
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentRecipeDetailsBinding.inflate(inflater, container, false)
+        return viewBinding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -61,9 +73,11 @@ class RecipeDetailsFragment : Fragment(R.layout.fragment_recipe_details) {
         if (!isShowing) {
             errorState.root.visibility = View.GONE
             viewBinding.viewsOnScreen.visibility = View.VISIBLE
+            viewBinding.progressBar.visibility = View.GONE
         } else {
             errorState.root.visibility = View.VISIBLE
             viewBinding.viewsOnScreen.visibility = View.GONE
+            viewBinding.progressBar.visibility = View.VISIBLE
         }
     }
 

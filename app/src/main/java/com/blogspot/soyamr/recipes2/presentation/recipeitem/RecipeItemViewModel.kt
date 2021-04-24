@@ -47,6 +47,7 @@ class RecipeItemViewModel @Inject constructor(
     }
 
     fun refresh() {
+        _isLoading.value = true
         viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
             getRecipeDetailedInfoUseCase(state.get<String>("RecipeId")!!)
                 .onSuccess {
