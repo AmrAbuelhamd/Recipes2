@@ -2,11 +2,11 @@ package com.blogspot.soyamr.recipes2.di.data
 
 import android.content.Context
 import androidx.room.Room
-import com.blogspot.soyamr.recipes2.data.database.RecipeDataBase
-import com.blogspot.soyamr.recipes2.data.database.dao.RecipeDao
-import com.blogspot.soyamr.recipes2.data.database.dao.RecipeDetailedInfoDao
-import com.blogspot.soyamr.recipes2.data.database.dao.ShortRecipeInfoDao
-import com.blogspot.soyamr.recipes2.data.database.managers.CacheManager
+import com.blogspot.soyamr.recipes2.data.local.db.RecipeDataBase
+import com.blogspot.soyamr.recipes2.data.local.db.dao.RecipeDao
+import com.blogspot.soyamr.recipes2.data.local.db.dao.RecipeDetailedInfoDao
+import com.blogspot.soyamr.recipes2.data.local.db.dao.ShortRecipeInfoDao
+import com.blogspot.soyamr.recipes2.data.local.managers.CacheManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

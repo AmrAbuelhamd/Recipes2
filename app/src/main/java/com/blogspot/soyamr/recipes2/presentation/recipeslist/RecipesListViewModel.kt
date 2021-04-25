@@ -4,10 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.blogspot.soyamr.recipes2.domain.RepositoriesContract
 import com.blogspot.soyamr.recipes2.domain.entities.SortType
 import com.blogspot.soyamr.recipes2.domain.entities.model.Recipe
-import com.blogspot.soyamr.recipes2.domain.usecases.GetRecipesListUseCase
-import com.blogspot.soyamr.recipes2.domain.usecases.UpdateRecipesUseCase
 import com.blogspot.soyamr.recipes2.utils.Constants
 import com.blogspot.soyamr.recipes2.utils.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,8 +19,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RecipesListViewModel @Inject constructor(
-    private val getRecipesListUseCase: GetRecipesListUseCase,
-    private val updateRecipesUseCase: UpdateRecipesUseCase
+    private val recipesRepository: RepositoriesContract.RecipesRepository
 ) :
     ViewModel() {
 
@@ -56,7 +54,7 @@ class RecipesListViewModel @Inject constructor(
 
     private fun getData() {
         viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
-            getRecipesListUseCase(searchKeyWord)
+            recipesRepository.getRecipes(searchKeyWord)
                 .onSuccess {
                     withContext(Dispatchers.Main) {
                         _isLoading.value = false
@@ -69,10 +67,8 @@ class RecipesListViewModel @Inject constructor(
     fun updateData() {
         _isLoading.value = true
         viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
-            updateRecipesUseCase()
-                .onSuccess {
-                    getData()
-                }
+            recipesRepository.updateRecipes()
+            getData()
         }
     }
 

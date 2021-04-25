@@ -1,8 +1,8 @@
 package com.blogspot.soyamr.recipes2.presentation.recipeitem
 
 import androidx.lifecycle.*
+import com.blogspot.soyamr.recipes2.domain.RepositoriesContract
 import com.blogspot.soyamr.recipes2.domain.entities.model.RecipeDetailedInfo
-import com.blogspot.soyamr.recipes2.domain.usecases.GetRecipeDetailedInfoUseCase
 import com.blogspot.soyamr.recipes2.utils.Constants
 import com.blogspot.soyamr.recipes2.utils.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RecipeItemViewModel @Inject constructor(
-    private val getRecipeDetailedInfoUseCase: GetRecipeDetailedInfoUseCase,
+    private val singleRecipeRepository: RepositoriesContract.SingleRecipeRepository,
     private val state: SavedStateHandle
 ) :
     ViewModel() {
@@ -47,7 +47,7 @@ class RecipeItemViewModel @Inject constructor(
     fun refresh() {
         _isLoading.value = true
         viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
-            getRecipeDetailedInfoUseCase(state.get<String>("RecipeId")!!)
+            singleRecipeRepository.getRecipeDetails(state.get<String>("RecipeId")!!)
                 .onSuccess {
                     withContext(Dispatchers.Main) {
                         _isLoading.value = false
