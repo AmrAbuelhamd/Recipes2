@@ -1,5 +1,7 @@
 package com.blogspot.soyamr.recipes2.di.domain
 
+import com.blogspot.soyamr.recipes2.data.common.contracts.RemoteContract
+import com.blogspot.soyamr.recipes2.data.common.domain_implementation.ImageRepositoryImpl
 import com.blogspot.soyamr.recipes2.data.common.domain_implementation.RecipesRepositoryImpl
 import com.blogspot.soyamr.recipes2.data.common.domain_implementation.SingleRecipeRepositoryImpl
 import com.blogspot.soyamr.recipes2.domain.RepositoriesContract
@@ -25,5 +27,10 @@ abstract class RepositoryModule {
         recipesRepository: RecipesRepositoryImpl
     ): RepositoriesContract.RecipesRepository
 
+    @Binds
+    @Singleton
+    abstract fun bindImageRepository(
+        imageRepository: ImageRepositoryImpl
+    ): RepositoriesContract.ImageRepository
 
 }

@@ -12,4 +12,8 @@ interface RepositoriesContract {
     interface SingleRecipeRepository {
         suspend fun getRecipeDetails(id: String): Result<RecipeDetailedInfo>
     }
+
+    interface ImageRepository {
+        suspend fun downloadImage(url: String): Result<String>
+    }
 }
