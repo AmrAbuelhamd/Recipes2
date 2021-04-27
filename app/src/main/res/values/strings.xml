@@ -25,4 +25,6 @@
     <string name="permission_required_message">Permission required to save photos from the Web.</string>
     <string name="accept">Accept</string>
     <string name="deny">Deny</string>
+    <string name="thanks">Thanks for adding me to favorites</string>
+    <string name="letsCookThis">let\'s cook \"%1$s\" TONIGHT</string>
 </resources>

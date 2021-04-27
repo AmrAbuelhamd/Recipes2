@@ -1,5 +1,6 @@
 package com.blogspot.soyamr.recipes2.presentation.recipeitem
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Html
 import android.view.View
@@ -12,8 +13,8 @@ import com.blogspot.soyamr.recipes2.data.common.util.toDateString
 import com.blogspot.soyamr.recipes2.databinding.FragmentRecipeDetailsBinding
 import com.blogspot.soyamr.recipes2.domain.entities.model.RecipeDetailedInfo
 import com.blogspot.soyamr.recipes2.presentation.common.BaseFragment
-import com.blogspot.soyamr.recipes2.presentation.recipeitem.adapters.RecommendedRecipeAdapter
 import com.blogspot.soyamr.recipes2.presentation.recipeitem.adapters.PhotosViewPagerAdapter
+import com.blogspot.soyamr.recipes2.presentation.recipeitem.adapters.RecommendedRecipeAdapter
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
@@ -42,6 +43,23 @@ class RecipeDetailsFragment :
     private fun setUpListeners() {
         errorState.root.findViewById<MaterialButton>(R.id.refreshButton).setOnClickListener {
             viewModel.refresh()
+        }
+
+        viewBinding.toolbar.setOnMenuItemClickListener {
+            if (it.itemId == R.id.like) {
+                showMessage(R.string.thanks)
+            } else if (it.itemId == R.id.share) {
+                viewModel.recipe.value?.name?.let {
+                    val sendIntent: Intent = Intent().apply {
+                        action = Intent.ACTION_SEND
+                        putExtra(Intent.EXTRA_TEXT, getString(R.string.letsCookThis, it))
+                        type = "text/plain"
+                    }
+                    val shareIntent = Intent.createChooser(sendIntent, null)
+                    startActivity(shareIntent)
+                }
+            }
+            true
         }
     }
 

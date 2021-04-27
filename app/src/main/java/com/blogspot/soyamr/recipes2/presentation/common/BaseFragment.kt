@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.constraintlayout.widget.Group
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
@@ -62,5 +63,9 @@ abstract class BaseFragment<VB : ViewBinding>(
             errorState.root.visibility = View.VISIBLE
             viewsOnScreen.visibility = View.GONE
         }
+    }
+
+    fun showMessage(msgId:Int){
+        Toast.makeText(requireContext(),getText(msgId),Toast.LENGTH_SHORT).show()
     }
 }
