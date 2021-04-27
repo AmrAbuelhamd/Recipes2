@@ -5,9 +5,9 @@ import android.content.Context
 import android.database.Cursor
 import android.net.Uri
 import android.os.Environment
-import com.blogspot.soyamr.recipes2.data.common.contracts.RemoteContract
 import com.blogspot.soyamr.recipes2.domain.RepositoriesContract
 import com.blogspot.soyamr.recipes2.utils.Constants
+import com.blogspot.soyamr.recipes2.utils.Utils
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.File
 import java.io.IOException
@@ -16,13 +16,13 @@ import kotlin.Result.Companion.success
 
 class ImageRepositoryImpl @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val utilsRepository: RemoteContract.UtilsRepository
+    private val utils: Utils
 ) : RepositoriesContract.ImageRepository {
 
 
     var msg: String? = ""
     override suspend fun downloadImage(url: String): Result<String> {
-        if (utilsRepository.hasInternetConnection()) {
+        if (utils.hasInternetConnection()) {
             val directory = File(Environment.DIRECTORY_PICTURES)
             if (!directory.exists()) {
                 directory.mkdirs()

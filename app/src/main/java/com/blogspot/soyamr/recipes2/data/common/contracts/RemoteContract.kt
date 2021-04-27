@@ -6,10 +6,6 @@ import com.blogspot.soyamr.recipes2.data.network.model.response_wrapper.RecipeDe
 import com.blogspot.soyamr.recipes2.data.network.model.response_wrapper.RecipesListResponseWrapper
 
 interface RemoteContract {
-    interface UtilsRepository {
-        fun hasInternetConnection(): Boolean
-    }
-
     interface RecipeRepository {
         suspend fun getRecipes(): List<RecipeResponse>
         suspend fun getRecipeDetailedInfo(uuid: String): RecipeDetailedInfoResponse

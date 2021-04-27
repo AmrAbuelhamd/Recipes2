@@ -1,8 +1,8 @@
 package com.blogspot.soyamr.recipes2.di.data
 
-import com.blogspot.soyamr.recipes2.data.common.contracts.RemoteContract
 import com.blogspot.soyamr.recipes2.data.network.RecipeApi
 import com.blogspot.soyamr.recipes2.utils.Constants
+import com.blogspot.soyamr.recipes2.utils.Utils
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
@@ -25,7 +25,7 @@ object RetrofitModule {
 
     @Provides
     @Singleton
-    fun getRetrofitObject(utilsRepository: RemoteContract.UtilsRepository): RecipeApi {
+    fun getRetrofitObject(utils: Utils): RecipeApi {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(
@@ -34,7 +34,7 @@ object RetrofitModule {
                         .setLevel(HttpLoggingInterceptor.Level.BODY)
                 ).addInterceptor { chain ->
                     val request = chain.request()
-                    if (!utilsRepository.hasInternetConnection()) {
+                    if (!utils.hasInternetConnection()) {
                         throw IOException(Constants.NO_INTERNET_CONNECTION)
                     }
                     chain.proceed(request)

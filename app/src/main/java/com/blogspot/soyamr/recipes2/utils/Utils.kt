@@ -1,19 +1,18 @@
-package com.blogspot.soyamr.recipes2.data.network.implementation
+package com.blogspot.soyamr.recipes2.utils
 
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
-import com.blogspot.soyamr.recipes2.data.common.contracts.RemoteContract
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
 
-class UtilsRepositoryImpl @Inject constructor(
+class Utils @Inject constructor(
     @ApplicationContext private val context: Context,
-) : RemoteContract.UtilsRepository {
+) {
 
-    override fun hasInternetConnection(): Boolean {
+    fun hasInternetConnection(): Boolean {
         val connectivityManager =
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

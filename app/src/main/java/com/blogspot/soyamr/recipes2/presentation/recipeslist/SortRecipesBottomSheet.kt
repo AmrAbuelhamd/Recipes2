@@ -4,14 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.fragment.findNavController
+import androidx.core.os.bundleOf
 import com.blogspot.soyamr.recipes2.R
-import com.blogspot.soyamr.recipes2.utils.Constants.KEY
 import com.blogspot.soyamr.recipes2.domain.entities.SortType
+import com.blogspot.soyamr.recipes2.utils.Constants.BUNDLE_KEY
+import com.blogspot.soyamr.recipes2.utils.Constants.REQUEST_KEY
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 
-class BottomSheetFragment : BottomSheetDialogFragment() {
+class SortRecipesBottomSheet : BottomSheetDialogFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -20,16 +21,16 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
         val view = inflater.inflate(R.layout.fragment_bottom_sheet, container, false)
 
         view.findViewById<MaterialButton>(R.id.sortByName).setOnClickListener {
-            findNavController().previousBackStackEntry?.savedStateHandle?.set<String>(
-                KEY,
-                SortType.ByName.key
+            parentFragmentManager.setFragmentResult(
+                REQUEST_KEY,
+                bundleOf(BUNDLE_KEY to SortType.ByName.key)
             )
             dismiss()
         }
         view.findViewById<MaterialButton>(R.id.sortByDate).setOnClickListener {
-            findNavController().previousBackStackEntry?.savedStateHandle?.set<String>(
-                KEY,
-                SortType.ByDate.key
+            parentFragmentManager.setFragmentResult(
+                REQUEST_KEY,
+                bundleOf(BUNDLE_KEY to SortType.ByDate.key)
             )
             dismiss()
         }

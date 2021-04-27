@@ -6,8 +6,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.blogspot.soyamr.recipes2.databinding.ImageviewBinding
 import com.squareup.picasso.Picasso
 
-class ViewPagerAdapter(private val images: List<String>, private val listener: (String) -> Unit) :
-    RecyclerView.Adapter<ViewPagerAdapter.ImageViewHolder>() {
+class PhotosViewPagerAdapter(private val images: List<String>, private val listener: (String) -> Unit) :
+    RecyclerView.Adapter<PhotosViewPagerAdapter.ImageViewHolder>() {
 
 
     class ImageViewHolder(

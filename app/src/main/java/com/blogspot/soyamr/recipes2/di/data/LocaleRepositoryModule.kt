@@ -1,6 +1,6 @@
 package com.blogspot.soyamr.recipes2.di.data
 
-import com.blogspot.soyamr.recipes2.data.common.contracts.LocaleContract
+import com.blogspot.soyamr.recipes2.data.common.contracts.LocalContract
 import com.blogspot.soyamr.recipes2.data.local.implementation.RecipeRepositoryImpl
 import com.blogspot.soyamr.recipes2.data.local.implementation.UtilsRepositoryImpl
 import dagger.Binds
@@ -17,12 +17,12 @@ abstract class LocaleRepositoryModule {
     @Singleton
     abstract fun bindUtilsRepository(
         utilsRepository: UtilsRepositoryImpl
-    ): LocaleContract.UtilsRepository
+    ): LocalContract.UtilsRepository
 
     @Binds
     @Singleton
     abstract fun bindRecipeRepository(
         recipesRepositoryImpl: RecipeRepositoryImpl
-    ): LocaleContract.RecipeRepository
+    ): LocalContract.RecipeRepository
 
 }

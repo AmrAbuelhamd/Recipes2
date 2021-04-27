@@ -13,9 +13,6 @@
         <action
             android:id="@+id/action_recipesListFragment_to_recipeDetailsFragment"
             app:destination="@id/recipeDetailsFragment" />
-        <action
-            android:id="@+id/action_recipesListFragment_to_bottomSheetFragment"
-            app:destination="@id/bottomSheetFragment" />
 
     </fragment>
     <fragment
@@ -34,11 +31,6 @@
             app:destination="@id/imageViewerFragment" />
     </fragment>
 
-    <dialog
-        android:id="@+id/bottomSheetFragment"
-        android:name="com.blogspot.soyamr.recipes2.presentation.recipeslist.BottomSheetFragment"
-        android:label="BottomSheetFragment" >
-    </dialog>
     <fragment
         android:id="@+id/imageViewerFragment"
         android:name="com.blogspot.soyamr.recipes2.presentation.image_viewer.ImageViewerFragment"

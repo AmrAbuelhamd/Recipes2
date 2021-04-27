@@ -11,9 +11,11 @@ import com.blogspot.soyamr.recipes2.domain.entities.SortType
 import com.blogspot.soyamr.recipes2.domain.entities.model.Recipe
 import com.blogspot.soyamr.recipes2.presentation.common.BaseFragment
 import com.blogspot.soyamr.recipes2.presentation.recipeslist.recycler.RecipeAdapter
-import com.blogspot.soyamr.recipes2.utils.Constants.KEY
+import com.blogspot.soyamr.recipes2.utils.Constants.BUNDLE_KEY
+import com.blogspot.soyamr.recipes2.utils.Constants.REQUEST_KEY
 import com.google.android.material.button.MaterialButton
 import dagger.hilt.android.AndroidEntryPoint
+
 
 @AndroidEntryPoint
 class RecipesListFragment :
@@ -34,12 +36,16 @@ class RecipesListFragment :
     }
 
     private fun setUpDialogObserver() {
-        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<String>(KEY)
-            ?.observe(viewLifecycleOwner) {
-                it?.let {
-                    viewModel.sort(SortType.getByKey(it))
-                }
+        // We set the listener on the child fragmentManager
+        childFragmentManager.setFragmentResultListener(
+            REQUEST_KEY,
+            viewLifecycleOwner
+        ) { key, bundle ->
+            val result = bundle.getString(BUNDLE_KEY)
+            result?.let {
+                viewModel.sort(SortType.getByKey(it))
             }
+        }
     }
 
 
@@ -101,7 +107,11 @@ class RecipesListFragment :
 
             toolBar.setOnMenuItemClickListener {
                 if (it.itemId == R.id.more) {
-                    findNavController().navigate(RecipesListFragmentDirections.actionRecipesListFragmentToBottomSheetFragment())
+                    val sortRecipesBottomSheet = SortRecipesBottomSheet()
+                    sortRecipesBottomSheet.show(
+                        childFragmentManager,
+                        sortRecipesBottomSheet.tag
+                    )
                 }
                 true
             }
@@ -112,3 +122,4 @@ class RecipesListFragment :
         }
     }
 }
+

@@ -12,6 +12,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
+import com.blogspot.soyamr.recipes2.R
 import com.blogspot.soyamr.recipes2.databinding.FragmentImageViewerBinding
 import com.blogspot.soyamr.recipes2.presentation.common.BaseFragment
 import com.squareup.picasso.Picasso
@@ -79,9 +80,9 @@ class ImageViewerFragment :
                 )
             ) {
                 AlertDialog.Builder(requireContext())
-                    .setTitle("Permission required")
-                    .setMessage("Permission required to save photos from the Web.")
-                    .setPositiveButton("Accept") { dialog, id ->
+                    .setTitle(R.string.permission_required)
+                    .setMessage(R.string.permission_required_message)
+                    .setPositiveButton(R.string.accept) { dialog, id ->
                         ActivityCompat.requestPermissions(
                             requireActivity(),
                             arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
@@ -89,7 +90,7 @@ class ImageViewerFragment :
                         )
                         requireActivity().finish()
                     }
-                    .setNegativeButton("Deny") { dialog, id -> dialog.cancel() }
+                    .setNegativeButton(R.string.deny) { dialog, id -> dialog.cancel() }
                     .show()
             } else {
                 // No explanation needed, we can request the permission.

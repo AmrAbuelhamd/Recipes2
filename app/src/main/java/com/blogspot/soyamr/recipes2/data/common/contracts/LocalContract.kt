@@ -3,7 +3,7 @@ package com.blogspot.soyamr.recipes2.data.common.contracts
 import com.blogspot.soyamr.recipes2.data.local.db.entities.RecipeDetailedInfoEntity
 import com.blogspot.soyamr.recipes2.data.local.db.entities.RecipeEntity
 
-interface LocaleContract {
+interface LocalContract {
 
     interface UtilsRepository {
         suspend fun clearDatabase()
