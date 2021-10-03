@@ -1,2 +1,4 @@
 include ':app'
 rootProject.name = "Recipes2"
+include ':data'
+include ':domain'

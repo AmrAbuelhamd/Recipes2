@@ -1,4 +1,4 @@
-package com.blogspot.soyamr.recipes2.domain.entities;
+package com.blogspot.soyamr.domain.recipes.model;
 
 enum class SortType(val key: String) {
     ByName("name;"),

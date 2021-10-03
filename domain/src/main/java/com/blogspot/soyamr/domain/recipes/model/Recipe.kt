@@ -1,4 +1,4 @@
-package com.blogspot.soyamr.recipes2.domain.entities.model
+package com.blogspot.soyamr.domain.recipes.model
 
 import java.util.*
 
